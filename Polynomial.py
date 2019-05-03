@@ -12,7 +12,7 @@ class Polynomial:
 	def power(self):
 		res = 0;
 		for monomial in self.monomials:
-			if monomial.power > res:
+			if monomial.factor != 0 and monomial.power > res:
 				res = monomial.power;
 		return res;
 		
@@ -42,14 +42,24 @@ class Polynomial:
 	def add(self, other):
 		self.scalar(other, 1);
 
+	def isNull(self):
+		for monomial in self.monomials:
+			if (monomial.factor != 0):
+				return False;
+		return True;
+
 	def __repr__(self):
+		if (len(self.monomials) == 0 or self.isNull()):
+			return "0";
 		res = "";
-		for index, monomial in enumerate(self.monomials):
-			if (index == 0):
+		printed = False;
+		for monomial in self.monomials:
+			if (printed == False and monomial.factor != 0):
 				res += repr(monomial);
+				printed = True;
 			else:
-				if (monomial.factor >= 0):
+				if (monomial.factor > 0):
 					res += " + " + repr(monomial);
-				else:
+				elif (monomial.factor < 0):
 					res += " " + repr(monomial);
 		return (res);
