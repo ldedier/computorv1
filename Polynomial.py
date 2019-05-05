@@ -30,7 +30,8 @@ class Polynomial:
 					j = j + 1;
 			i = i + 1;
 
-		
+	def sort(self):
+		self.monomials.sort(key=lambda monomial:monomial.power);
 
 	def scalar(self, other, scalar): #p1 = p1 + scalar * p2
 		for monomial in other.monomials:

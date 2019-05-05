@@ -23,7 +23,7 @@ class Equation:
 		print self;
 
 		self.lhs.reduce();
-#		self.lhs.sort();
+		self.lhs.sort();
 		self.power = self.lhs.power();
 		print self;
 
