@@ -64,8 +64,12 @@ class PolynomialParser:
                 self.power = 1;
                 self.await_power = True;
                 self.parsed_factor = True;
+                self.await_X = False;
             elif symbol == "^":
+                if (not self.await_power):
+                    raise Exception("polynomial syntax error around:",  symbol);
                 self.await_power_value = True;
+                self.await_power_power = False;
             elif (symbol == "-" or symbol == "+"):
                 if (self.parsed_factor):
                     self.flush();
