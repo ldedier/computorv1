@@ -35,7 +35,9 @@ class Polynomial:
 
 	def scalar(self, other, scalar): #p1 = p1 + scalar * p2
 		for monomial in other.monomials:
-			self.monomials.append(monomial.scalaredClone(scalar));
+			clone = monomial.scalaredClone(scalar);
+			if (clone.factor != 0):
+				self.monomials.append(clone);
 
 	def sub(self, other):
 		self.scalar(other, -1);
@@ -51,6 +53,15 @@ class Polynomial:
 			if (monomial.factor != 0):
 				return False;
 		return True;
+
+	def equals(self, other):
+		if (len(self.monomials) != len(other.monomials)):
+			return False;
+		else:
+			for i in range(len(self.monomials)):
+				if (not self.monomials[i].equals(other.monomials[i])):
+					return False;
+			return True;
 
 	def __repr__(self):
 		if (len(self.monomials) == 0 or self.isNull()):

@@ -24,6 +24,10 @@ class Monomial:
 		if (self.power == other.power):
 			self.factor += other.factor;
 
+	def equals(self, other):
+		#print "call to equals for ", self, "AND", other
+		return (self.factor == other.factor and self.power == other.power);
+	
 	def __repr__(self):
 		res = "";
 		if (self.factor < 0):

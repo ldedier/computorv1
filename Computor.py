@@ -1,7 +1,8 @@
 # coding: utf-8
 import sys
-
+import copy
 from Polynomial import Polynomial
+from Monomial import Monomial
 
 class Equation:
 	def __init__(self, string):
@@ -16,19 +17,23 @@ class Equation:
 	def isPopulated(self):
 		return self.lhs.isPopulated() and self.rhs.isPopulated();
 
+	def equals(self, other):
+		return self.lhs.equals(other.lhs) and self.rhs.equals(other.rhs);
+
 	def isolate(self):
-		
 		print self;
 
+		tmp = copy.deepcopy(self);
 		self.lhs.sub(self.rhs);
-		self.rhs.monomials = [];
-
-		print self;
-
+		self.rhs.monomials = [Monomial(0, 0)];
+		if (not self.equals(tmp)):
+			print self;
+		tmp = copy.deepcopy(self);
 		self.lhs.reduce();
 		self.lhs.sort();
 		self.power = self.lhs.power();
-		print self;
+		if (not self.equals(tmp)):
+			print self;
 
 	def __repr__(self):
 		return repr(self.lhs) + " = " + repr(self.rhs);
