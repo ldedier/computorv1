@@ -13,6 +13,9 @@ class Equation:
 			self.lhs = Polynomial(split[0]);
 			self.rhs = Polynomial(split[1]);
 
+	def isPopulated(self):
+		return self.lhs.isPopulated() and self.rhs.isPopulated();
+
 	def isolate(self):
 		
 		print self;
@@ -48,6 +51,8 @@ class Computor:
 				self.a = monomial.factor;
 
 	def resolveEquation(self):
+		if (not self.equation.isPopulated()):
+			raise Exception("An equation needs populated polynomes");
 		self.equation.isolate();
 		if (self.equation.power > 2):
 			raise Exception("\nThis equation is not solvable because its power is equal to ", str(self.equation.power));

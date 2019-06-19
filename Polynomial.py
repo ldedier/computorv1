@@ -43,6 +43,9 @@ class Polynomial:
 	def add(self, other):
 		self.scalar(other, 1);
 
+	def isPopulated(self):
+		return len(self.monomials);
+
 	def isNull(self):
 		for monomial in self.monomials:
 			if (monomial.factor != 0):

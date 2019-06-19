@@ -2,6 +2,13 @@ import re
 
 from Monomial import Monomial
 
+def is_integer(s):
+	try:
+		int(s);
+		return True;
+	except ValueError:
+		return False;
+
 def is_number(s):
 	try:
 		float(s);
@@ -20,36 +27,43 @@ class PolynomialParser:
 		self.factor = 1 ;
 		self.power = 0;
 		self.await_power = False;
+		self.await_power_value = False;
 		self.parsed_factor = False;
 
 	def parse(self):
-		split = self.string.rstrip().split(" ");
+		split = re.split('(\W+)', self.string)
+		split = [x.strip(' ') for x in split]
 		split = filter(None, split)
 		self.init_current();
 		for index, symbol in enumerate(split):
-			m = re.search("^X\^([0-9]+)$", symbol);
-			if (is_number(symbol)):
-				if (self.parsed_factor == True or self.await_power == True):
+			if (is_integer(symbol)):
+				if (self.parsed_factor == True and self.await_power_value == False):
 					raise Exception("polynomial syntax error around:",  symbol);
-				self.factor = float(symbol);
-				self.parsed_factor = True;
+				elif (self.parsed_factor == False):
+					self.factor = float(symbol);
+					self.parsed_factor = True;
+				elif (self.await_power_value == True):
+					if (int(symbol) < 0):
+						raise Exception("please only give positive polynomial power: ", symbol);
+					else:
+						self.power = int(symbol);
+						self.flush();
 			elif (symbol == "*"):
-				if (self.parsed_factor == False or self.await_power == True):
+				if (self.parsed_factor == False or
+					self.await_power == True or self.await_power_value == True):
 					raise Exception("polynomial syntax error around:",  symbol);
 				self.await_power = True;
-			elif m or symbol == "X":
-				if (symbol == "X"):
-					self.power = 1;
-				else:
-					self.power = int(m.group(1));
-				self.flush();
+			elif symbol == "X":
+				self.power = 1;
+				self.await_power = True;
+				self.parsed_factor = True;
+			elif symbol == "^":
+				self.await_power_value = True;
 			elif (symbol == "-" or symbol == "+"):
 				if (self.parsed_factor):
 					self.flush();
 				if (symbol == "-"):
 					self.sign *= -1;
-			elif (re.match("^X\^-[0-9]+$", symbol)):
-				raise Exception("please only give positive polynomial power: ", symbol);
 			else:
 				raise Exception("polynomial lexical error: ", symbol);
 		if (self.parsed_factor):
