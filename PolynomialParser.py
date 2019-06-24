@@ -81,7 +81,7 @@ class PolynomialParser:
         if (self.parsed_factor and not self.await_power_value and not self.await_X):
             self.flush();
         elif (self.parsed_sign or self.await_power_value or self.await_X):
-            raise Exception("polynomial syntax error on last token");
+            raise Exception("polynomial syntax error on last token", " (" + split[len(split) - 1] + ")");
 
     def flush(self):
         self.polynomial.monomials.append(Monomial(self.factor * self.sign, self.power));

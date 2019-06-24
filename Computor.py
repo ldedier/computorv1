@@ -85,6 +85,7 @@ class Computor:
 			else:
 				print("this equation has no solutions !");
 			return ;
+			#solutions if 0 -> = 0
 		print ("\nthis equation's %d solution%s:\n\n%s" % (len(self.solutions), "s" if len(self.solutions)>1 else "" , "\n".join(self.solutions)));
 
 if len(sys.argv) == 2:
