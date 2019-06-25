@@ -2,12 +2,26 @@ import re
 
 from Monomial import Monomial
 
+def to_int(x):
+    try:
+        return int(x);
+    except ValueError:
+        ret = float(x);
+        return (int(float(x)));
+
 def is_integer(s):
     try:
         int(s);
         return True;
     except ValueError:
-        return False;
+        try:
+            ret = float(s);
+            if (ret - int(ret) == 0):
+                return True;
+            else:
+                return False;
+        except ValueError:
+		    return False;
 
 def is_number(s):
     try:
@@ -20,11 +34,12 @@ class PolynomialParser:
     def __init__(self, polynomial, string):
         self.polynomial = polynomial;
         self.string = string;
+        self.first = True;
         self.init_current();
 
     def init_current(self):
             self.sign = 1;
-            self.factor = 1 ;
+            self.factor = 1;
             self.power = 0;
             self.parsed_sign = False;
             self.await_mul = False;
@@ -43,7 +58,9 @@ class PolynomialParser:
                 if (self.parsed_factor == True and self.await_power_value == False):
                     raise Exception("polynomial syntax error around:",  symbol);
                 elif (self.parsed_factor == False):
-                    self.factor = float(symbol);
+                    if (not self.parsed_sign and not self.first):
+                        raise Exception("polynomial syntax error around:",  symbol);
+                    self.factor = int(symbol);
                     self.parsed_factor = True;
                     self.await_mult = True;
                 elif (self.await_power_value == True):
@@ -60,6 +77,8 @@ class PolynomialParser:
                 self.await_X = True;
             elif symbol == "X":
                 if (not self.await_X and self.parsed_factor):
+                    raise Exception("polynomial syntax error around:",  symbol);
+                if (not self.parsed_sign and not self.first):
                     raise Exception("polynomial syntax error around:",  symbol);
                 self.power = 1;
                 self.await_power = True;
@@ -78,6 +97,7 @@ class PolynomialParser:
                 self.parsed_sign = True;
             else:
                 raise Exception("polynomial lexical error: ", symbol);
+            self.first = False;
         if (self.parsed_factor and not self.await_power_value and not self.await_X):
             self.flush();
         elif (self.parsed_sign or self.await_power_value or self.await_X):
