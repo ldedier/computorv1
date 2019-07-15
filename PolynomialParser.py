@@ -38,15 +38,15 @@ class PolynomialParser:
         self.init_current();
 
     def init_current(self):
-            self.sign = 1;
+            self.sign = 1;  # + == 1 or - == -1
             self.factor = 1;
             self.power = 0;
-            self.parsed_sign = False;
-            self.await_mul = False;
-            self.await_X = False;
-            self.await_power = False;
-            self.await_power_value = False;
-            self.parsed_factor = False;
+            self.parsed_sign = False; #parsed the sign
+            self.await_mul = False; #await a multiplication sign (*)
+            self.await_X = False; # await X
+            self.await_power = False; # await a ^
+            self.await_power_value = False; # await an integer as as power
+            self.parsed_factor = False; # parsed the factor as a value
 
     def parse(self):
         split = re.split('(\W+)', self.string)
@@ -62,6 +62,7 @@ class PolynomialParser:
                         raise Exception("polynomial syntax error around:",  symbol);
                     self.factor = int(symbol);
                     self.parsed_factor = True;
+                    self.parsed_sign = True;
                     self.await_mult = True;
                 elif (self.await_power_value == True):
                     if (int(symbol) < 0):
@@ -101,7 +102,7 @@ class PolynomialParser:
         if (self.parsed_factor and not self.await_power_value and not self.await_X):
             self.flush();
         elif (self.parsed_sign or self.await_power_value or self.await_X):
-            raise Exception("polynomial syntax error on last token", " (" + split[len(split) - 1] + ")");
+            raise Exception("polynomial syntax error on last token", " (" + split[index] + ")");
 
     def flush(self):
         self.polynomial.monomials.append(Monomial(self.factor * self.sign, self.power));
