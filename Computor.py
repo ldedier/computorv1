@@ -2,7 +2,16 @@
 import sys
 import copy
 from Polynomial import Polynomial
+from PolynomialParser import is_number
+from PolynomialParser import is_integer
+from PolynomialParser import to_int
 from Monomial import Monomial
+
+def solutions_refine(sol):
+	if (is_integer(sol)):
+		return (str(to_int(sol)))
+	else:
+		return (sol)
 
 class Equation:
 	def __init__(self, string):
@@ -64,7 +73,7 @@ class Computor:
 		self.populateEquationValues();
 		print ("\nthis equation\'s degree is %d" % self.equation.power);
 		if (self.equation.power == 2):
-			self.delta = (self.b * self.b) - (4 * self.a * self.c);
+			self.delta = (self.b * self.b) - (4.0 * self.a * self.c);
 			print ("\ndelta: 𝚫 = %d\n" % self.delta);
 			if (self.delta > 0):
 				print ("𝚫 is strictly positive, so it has 2 real solutions");
@@ -85,6 +94,8 @@ class Computor:
 			else:
 				print("this equation has no solutions !");
 			return ;
+			#solutions if 0 -> = 0
+		self.solutions = map(solutions_refine, self.solutions);
 		print ("\nthis equation's %d solution%s:\n\n%s" % (len(self.solutions), "s" if len(self.solutions)>1 else "" , "\n".join(self.solutions)));
 
 if len(sys.argv) == 2:
