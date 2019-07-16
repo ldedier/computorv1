@@ -55,13 +55,7 @@ class Polynomial:
 		return True;
 
 	def equals(self, other):
-		if (len(self.monomials) != len(other.monomials)):
-			return False;
-		else:
-			for i in range(len(self.monomials)):
-				if (not self.monomials[i].equals(other.monomials[i])):
-					return False;
-			return True;
+            return repr(self) == repr(other);
 
 	def __repr__(self):
 		if (len(self.monomials) == 0 or self.isNull()):
