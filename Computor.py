@@ -74,7 +74,10 @@ class Computor:
 		print ("\nthis equation\'s degree is %d" % self.equation.power);
 		if (self.equation.power == 2):
 			self.delta = (self.b * self.b) - (4.0 * self.a * self.c);
-			print ("\ndelta: 𝚫 = %d\n" % self.delta);
+			if is_integer(str(self.delta)):
+				print ("\ndelta: 𝚫 = %d\n" % self.delta);
+			else:
+				print ("\ndelta: 𝚫 = %f\n" % self.delta);
 			if (self.delta > 0):
 				print ("𝚫 is strictly positive, so it has 2 real solutions");
 				self.solutions.append(str((- self.b - self.delta ** 0.5) / (2 * self.a)));
